@@ -15,4 +15,8 @@ class Spaceship(Sprite):
         screen.blit(self.image, (self.rect.x, self.rect.y))
     
     def update(self, keyboard_events):
-        pass
+        if keyboard_events[pygame.K_LEFT]:
+            self.rect.x += -15
+        if keyboard_events[pygame.K_RIGHT]:
+            self.rect.x += 15
+        
