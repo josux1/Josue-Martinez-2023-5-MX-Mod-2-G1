@@ -40,15 +40,15 @@ class Game:
     def update(self):
         events = pygame.key.get_pressed()
         self.spaceship.update(events)
-        pass # pass equivale a hacer nada 
+        self.enemy.move_automaticly_y()
 
     def draw(self):
         self.clock.tick(FPS) # configuro cuantos frames per second voy a dibujar
         self.screen.fill((255, 255, 255)) # lleno el screen de color BLANCO???? 255, 255, 255 es el codigo RGB
         self.draw_background()
 
-        self.enemy.draw(self.screen)
         self.spaceship.draw(self.screen)
+        self.enemy.draw(self.screen)
 
         pygame.display.update() # esto hace que el dibujo se actualice en el display de pygame
         pygame.display.flip()  # hace el cambio
