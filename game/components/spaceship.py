@@ -23,10 +23,20 @@ class Spaceship(Sprite):
             self.move_left()
         if (keyboard_events[pygame.K_RIGHT] and self.rect.x < SCREEN_WIDTH - self.image_width):
             self.move_right()
+        if (keyboard_events[pygame.K_UP] and self.rect.y >= 0):
+            self.move_up()
+        if (keyboard_events[pygame.K_DOWN] and self.rect.y < SCREEN_HEIGHT - self.image_height):
+            self.move_down()
 
     def move_left(self):
         self.rect.x -= self.speed
 
     def move_right(self):
         self.rect.x += self.speed
+
+    def move_up(self):
+        self.rect.y -= self.speed
+
+    def move_down(self):
+        self.rect.y += self.speed
         
