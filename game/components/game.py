@@ -2,6 +2,7 @@ import pygame
 
 from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from game.components.spaceship import Spaceship
+from game.components.enemy import Enemy
 
 
 class Game:
@@ -16,6 +17,7 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 0
         self.spaceship = Spaceship()
+        self.enemy = Enemy()
 
     def run(self):
         # Game loop: events - update - draw
@@ -45,6 +47,7 @@ class Game:
         self.screen.fill((255, 255, 255)) # lleno el screen de color BLANCO???? 255, 255, 255 es el codigo RGB
         self.draw_background()
 
+        self.enemy.draw(self.screen)
         self.spaceship.draw(self.screen)
 
         pygame.display.update() # esto hace que el dibujo se actualice en el display de pygame
