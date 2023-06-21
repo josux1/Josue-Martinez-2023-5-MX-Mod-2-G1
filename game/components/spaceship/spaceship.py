@@ -53,7 +53,8 @@ class Spaceship(Sprite):
 
     def update_bullets(self):
         for bullet in self.bullets:
-            if bullet.update():
+            bullet.fire()
+            if not bullet.available:
                 self.bullets.remove(bullet)
 
     def draw_bullets(self, screen):

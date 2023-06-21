@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from game.utils.constants import BULLET
+from game.utils.constants import BULLET, BLAST_SOUND
 
 
 class Bullet(Sprite):
@@ -14,17 +14,12 @@ class Bullet(Sprite):
          self.rect.y = y
          self.speed = 10
          self.available = True
+         self.sound = BLAST_SOUND
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
-
-    def update(self):
-        self.fire()
 
     def fire(self):
         self.rect.y -= self.speed
         if self.rect.bottom <= 0:
             self.available = False
-            return self.available
-        else:
-            return self.available

@@ -17,7 +17,6 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 0
         self.spaceship = Spaceship()
-        # self.enemy = Enemy()
         self.enemy_handler = EnemyHandler()
 
     def run(self):
@@ -42,11 +41,7 @@ class Game:
         events = pygame.key.get_pressed()
         self.spaceship.update(events)
         self.enemy_handler.update()
-
-        for enemy in self.enemy_handler.enemies:
-            for bullet in self.spaceship.bullets:
-                if enemy.rect.colliderect(bullet.rect):
-                    enemy.is_alive = False
+        self.enemy_handler.verify_explotion(self.spaceship.bullets)
         
 
     def draw(self):

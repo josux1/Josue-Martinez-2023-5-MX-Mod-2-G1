@@ -23,3 +23,10 @@ class EnemyHandler:
 
     def remove_enemy(self, enemy):
         self.enemies.remove(enemy)
+
+    def verify_explotion(self, bullets):
+        for enemy in self.enemies:
+            for bullet in bullets:
+                if enemy.rect.colliderect(bullet.rect):
+                    enemy.is_alive = False
+                    bullet.sound.play()
