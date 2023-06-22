@@ -1,6 +1,7 @@
-from game.components.enemies.enemy_ship import EnemyShip
-from game.components.spaceship.bullet import Bullet
 import pygame
+from game.components.spaceship.bullet import Bullet
+from game.components.enemies.enemy_ship import EnemyShip
+from game.utils.constants import BOOM
 
 class EnemyHandler:
     MAX_ENEMIES = 5
@@ -13,6 +14,7 @@ class EnemyHandler:
         self.deaths = 0
         self.score = 0
         self.score_amount = 7
+        self.sound = BOOM
 
     def update(self):
         self.add_enemy()
@@ -70,6 +72,8 @@ class EnemyHandler:
     def get_score(self):
         return self.score
     
-    def reset_score(self):
+    def reset(self):
         self.deaths = 0
         self.score = 0
+        self.enemies = []
+        self.bullets = []

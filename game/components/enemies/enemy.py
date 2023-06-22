@@ -20,7 +20,7 @@ class Enemy(Sprite):
         self.mov_x = random.choice(self.MOV_X)
         self.index = 0
         self.is_alive = True
-        self.sound = BOOM
+        # self.sound = BOOM
 
     def update(self):
         if(self.rect.y >= SCREEN_HEIGHT):

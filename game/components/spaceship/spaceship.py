@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 from game.utils.constants import SPACESHIP
-from game.utils.constants import SCREEN_HEIGHT, SCREEN_WIDTH, GAME_OVER
+from game.utils.constants import SCREEN_HEIGHT, SCREEN_WIDTH, GAME_OVER_SOUND
 from game.components.spaceship.bullet import Bullet
 
 # Sprite = Objeto Dibujable
@@ -60,13 +60,18 @@ class Spaceship(Sprite):
         for bullet in self.bullets:
             screen.blit(bullet.image, bullet.rect)
 
-    def loose(self, enemy_handler):
+    def lose(self, enemy_handler):
         for enemy in enemy_handler.enemies:
             for enemy_bullet in enemy_handler.bullets:
                 if enemy_bullet.rect.colliderect(self.rect):
-                    enemy.sound.play()
-                    GAME_OVER.play()
+                    # enemy.sound.play()
+                    # GAME_OVER_SOUND.play()
                     return True
+    
+    def reset(self):
+        self.rect.y = SCREEN_HEIGHT - self.image_height
+        self.rect.x = SCREEN_WIDTH // 2 - self.image_width//2
+        self.bullets = []
                 
     
 

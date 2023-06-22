@@ -1,7 +1,7 @@
 import pygame
 import time
 
-from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, GAME_OVER
+from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, GAME_OVER_SOUND
 from game.components.spaceship.spaceship import Spaceship
 from game.components.enemies.enemy_handler import EnemyHandler
 from game.components.scores.score_handler import ScoreHandler
@@ -23,6 +23,7 @@ class Game:
 
         self.score_handler = ScoreHandler()
         self.game_over = False
+        self.game_over_sound = GAME_OVER_SOUND
 
     def run(self):
         # Game loop: events - update - draw
@@ -51,11 +52,14 @@ class Game:
         self.score_handler.total_deaths = self.enemy_handler.get_deaths()
         self.score_handler.current_score = self.enemy_handler.get_score()
         
-        if(self.spaceship.loose(self.enemy_handler)):
+        if(self.spaceship.lose(self.enemy_handler) and self.game_over == False):
             self.game_over = True
+            self.enemy_handler.sound.play()
+            self.game_over_sound.play()
         if(self.score_handler.continue_game(events)):
-            self.enemy_handler.reset_score()
             self.game_over = False
+            self.enemy_handler.reset()
+            self.spaceship.reset()
 
             
 
@@ -64,11 +68,13 @@ class Game:
         self.screen.fill((255, 255, 255)) # lleno el screen de color BLANCO???? 255, 255, 255 es el codigo RGB
         self.draw_background()
 
-        self.spaceship.draw(self.screen)
-        self.enemy_handler.draw(self.screen)
-        self.score_handler.draw_scores(self.screen)
         if(self.game_over):
-                self.score_handler.draw_game_over_screen(self.screen)
+            self.score_handler.draw_game_over_screen(self.screen)
+        else:
+            self.spaceship.draw(self.screen)
+            self.enemy_handler.draw(self.screen)
+            self.score_handler.draw_scores(self.screen)
+
 
         pygame.display.update() # esto hace que el dibujo se actualice en el display de pygame
         pygame.display.flip()  # hace el cambio
