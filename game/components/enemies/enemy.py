@@ -1,5 +1,5 @@
 import random
-from game.utils.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from game.utils.constants import SCREEN_WIDTH, SCREEN_HEIGHT, BOOM
 from pygame.sprite import Sprite
 
 class Enemy(Sprite):
@@ -20,6 +20,7 @@ class Enemy(Sprite):
         self.mov_x = random.choice(self.MOV_X)
         self.index = 0
         self.is_alive = True
+        self.sound = BOOM
 
     def update(self):
         if(self.rect.y >= SCREEN_HEIGHT):

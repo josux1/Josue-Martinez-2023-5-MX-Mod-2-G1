@@ -10,8 +10,11 @@ IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 
 # Assets Constants
 ICON = pygame.image.load(os.path.join(IMG_DIR, "Spaceship/spaceship.png"))
+
 pygame.mixer.init()
-BLAST_SOUND = pygame.mixer.Sound(os.path.join(IMG_DIR, "Spaceship/sound.wav"))
+BLAST_SOUND = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/sound.wav"))
+BOOM = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/boom.wav"))
+GAME_OVER = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/game_over.wav"))
 
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 

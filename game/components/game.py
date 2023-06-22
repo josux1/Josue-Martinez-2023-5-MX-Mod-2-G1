@@ -1,8 +1,10 @@
 import pygame
+import time
 
-from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, GAME_OVER
 from game.components.spaceship.spaceship import Spaceship
 from game.components.enemies.enemy_handler import EnemyHandler
+from game.components.scores.score_handler import ScoreHandler
 
 
 class Game:
@@ -18,6 +20,9 @@ class Game:
         self.y_pos_bg = 0
         self.spaceship = Spaceship()
         self.enemy_handler = EnemyHandler()
+
+        self.score_handler = ScoreHandler()
+        self.game_over = False
 
     def run(self):
         # Game loop: events - update - draw
@@ -42,7 +47,17 @@ class Game:
         self.spaceship.update(events)
         self.enemy_handler.update()
         self.enemy_handler.verify_explotion(self.spaceship.bullets)
+        self.enemy_handler.fire_automaticly()
+        self.score_handler.total_deaths = self.enemy_handler.get_deaths()
+        self.score_handler.current_score = self.enemy_handler.get_score()
         
+        if(self.spaceship.loose(self.enemy_handler)):
+            self.game_over = True
+        if(self.score_handler.continue_game(events)):
+            self.enemy_handler.reset_score()
+            self.game_over = False
+
+            
 
     def draw(self):
         self.clock.tick(FPS) # configuro cuantos frames per second voy a dibujar
@@ -51,6 +66,9 @@ class Game:
 
         self.spaceship.draw(self.screen)
         self.enemy_handler.draw(self.screen)
+        self.score_handler.draw_scores(self.screen)
+        if(self.game_over):
+                self.score_handler.draw_game_over_screen(self.screen)
 
         pygame.display.update() # esto hace que el dibujo se actualice en el display de pygame
         pygame.display.flip()  # hace el cambio
