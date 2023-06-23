@@ -5,6 +5,7 @@ from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, F
 from game.components.spaceship.spaceship import Spaceship
 from game.components.enemies.enemy_handler import EnemyHandler
 from game.components.scores.score_handler import ScoreHandler
+from game.components.powers.shield_handler import ShieldHandler
 
 
 class Game:
@@ -20,9 +21,10 @@ class Game:
         self.y_pos_bg = 0
         self.spaceship = Spaceship()
         self.enemy_handler = EnemyHandler()
-
         self.score_handler = ScoreHandler()
         self.game_over = False
+
+        self.shield_handler = ShieldHandler()
         self.game_over_sound = GAME_OVER_SOUND
 
     def run(self):
@@ -47,10 +49,12 @@ class Game:
         events = pygame.key.get_pressed()
         self.spaceship.update(events)
         self.enemy_handler.update()
+        self.shield_handler.update()
         self.enemy_handler.verify_explotion(self.spaceship.bullets)
         self.enemy_handler.fire_automaticly()
         self.score_handler.total_deaths = self.enemy_handler.get_deaths()
         self.score_handler.current_score = self.enemy_handler.get_score()
+        self.spaceship.verify_shield(self.shield_handler.shields)
         
         if(self.spaceship.lose(self.enemy_handler) and self.game_over == False):
             self.game_over = True
@@ -74,6 +78,7 @@ class Game:
             self.spaceship.draw(self.screen)
             self.enemy_handler.draw(self.screen)
             self.score_handler.draw_scores(self.screen)
+            self.shield_handler.draw(self.screen)
 
 
         pygame.display.update() # esto hace que el dibujo se actualice en el display de pygame

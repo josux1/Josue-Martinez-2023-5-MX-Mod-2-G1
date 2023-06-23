@@ -16,6 +16,7 @@ pygame.mixer.init()
 BLAST_SOUND = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/sound.wav"))
 BOOM = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/boom.wav"))
 GAME_OVER_SOUND = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/game_over.wav"))
+SHIELD_SOUND = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/shield_sound.wav"))
 
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 

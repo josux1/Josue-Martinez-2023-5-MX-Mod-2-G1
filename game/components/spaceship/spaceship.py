@@ -1,7 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from game.utils.constants import SPACESHIP
-from game.utils.constants import SCREEN_HEIGHT, SCREEN_WIDTH, GAME_OVER_SOUND
+from game.utils.constants import SPACESHIP, SCREEN_HEIGHT, SCREEN_WIDTH, SPACESHIP_SHIELD, BOOM
 from game.components.spaceship.bullet import Bullet
 
 # Sprite = Objeto Dibujable
@@ -9,6 +8,7 @@ class Spaceship(Sprite):
     def __init__(self):
         self.image_width = 40
         self.image_height = 70
+        self.has_shield = False
         self.image = SPACESHIP
         self.image = pygame.transform.scale(self.image, (self.image_width, self.image_height))
         self.rect = self.image.get_rect()
@@ -16,10 +16,16 @@ class Spaceship(Sprite):
         self.rect.x = SCREEN_WIDTH // 2 - self.image_width//2
         self.speed = 20
         self.bullets = []
+
+        self.impact_sound = BOOM
+        self.impacts = 0
+
         
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
         self.draw_bullets(screen)
+        self.set_shield_image(screen, self.rect.x, self.rect.y)
+        self.set_original_image(screen, self.rect.x, self.rect.y)
     
     def update(self, keyboard_events):
         if (keyboard_events[pygame.K_LEFT] and self.rect.x >= 0):
@@ -63,15 +69,63 @@ class Spaceship(Sprite):
     def lose(self, enemy_handler):
         for enemy in enemy_handler.enemies:
             for enemy_bullet in enemy_handler.bullets:
-                if enemy_bullet.rect.colliderect(self.rect):
-                    # enemy.sound.play()
-                    # GAME_OVER_SOUND.play()
+                print(self.impacts)
+                if(enemy_bullet.rect.colliderect(self.rect) and self.has_shield == False and self.impacts >= 10):
+                    self.impacts = 0
                     return True
+                if(enemy_bullet.rect.colliderect(self.rect) and self.has_shield):
+                    self.has_shield = False
+                    self.impact_sound.play()
+                    self.impacts += 1
+                    return False
+                if(enemy_bullet.rect.colliderect(self.rect) and self.has_shield == False):
+                    self.impacts += 1
+                    # self.impact_sound.play()
+                    return False
     
     def reset(self):
         self.rect.y = SCREEN_HEIGHT - self.image_height
         self.rect.x = SCREEN_WIDTH // 2 - self.image_width//2
         self.bullets = []
+        self.has_shield = False
+        self.image = SPACESHIP
+        self.image = pygame.transform.scale(self.image, (self.image_width, self.image_height))
+        self.rect = self.image.get_rect()
+        self.rect.y = SCREEN_HEIGHT - self.image_height
+        self.rect.x = SCREEN_WIDTH // 2 - self.image_width//2
+
+    def set_shield_image(self, screen, x, y):
+        if(self.has_shield):
+            self.image_width = 50
+            self.image_height = 70
+            self.image = SPACESHIP_SHIELD
+            self.image = pygame.transform.scale(self.image, (self.image_width, self.image_height))
+            self.rect = self.image.get_rect()
+            self.rect.y = y
+            self.rect.x = x 
+            screen.blit(self.image, (self.rect.x, self.rect.y))
+            return
+
+    def set_original_image(self, screen, x, y):
+        if(not self.has_shield):
+            self.image_width = 40
+            self.image_height = 70
+            self.image = SPACESHIP
+            self.image = pygame.transform.scale(self.image, (self.image_width, self.image_height))
+            self.rect = self.image.get_rect()
+            self.rect.y = y
+            self.rect.x = x 
+            screen.blit(self.image, (self.rect.x, self.rect.y))
+            return
+
+    def verify_shield(self, shields):
+        for shield in  shields:
+            if(shield.rect.colliderect(self.rect) and not self.has_shield):
+                shield.is_alive = False
+                self.has_shield = True
+                shield.sound.play()
+            elif(shield.rect.colliderect(self.rect) and self.has_shield):
+                return
                 
     
 
