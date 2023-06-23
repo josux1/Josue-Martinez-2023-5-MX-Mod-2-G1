@@ -10,13 +10,8 @@ class ScoreHandler:
         self.loose = False
 
     def draw_scores(self, screen):
-        font = pygame.font.Font(None, 38)
-        score_text = font.render(f'Total Deaths: {self.total_deaths}', True, (255, 255, 255))
-        screen.blit(score_text, (10, 10))
-        
-        font2 = pygame.font.Font(None, 38)
-        score_text2 = font2.render(f'Score: {self.current_score}', True, (255, 255, 255))
-        screen.blit(score_text2, (SCREEN_WIDTH - score_text2.get_width() - 15, 10))
+        self.set_score('Total Deaths:', 38, self.total_deaths, screen, 10, 10)
+        self.set_score('Score:', 38, self.current_score, screen, 60, 10)
 
     def draw_game_over_screen(self, screen):
         self.loose = True
@@ -24,23 +19,11 @@ class ScoreHandler:
         game_over_surface.fill((0, 0, 0))
         game_over_surface.set_alpha(128)
         screen.blit(game_over_surface, (0, 0))
-
-        font = pygame.font.Font(None, 80)
-        score_text = font.render('Game Over', True, (255, 255, 255))
-        screen.blit(score_text, (SCREEN_WIDTH / 2 - score_text.get_width() / 2 , SCREEN_HEIGHT / 4))
-        font5 = pygame.font.Font(None, 30)
-        score_text5 = font5.render('Press R to restart', True, (255, 255, 255))
-        screen.blit(score_text5, (SCREEN_WIDTH / 2 - score_text5.get_width() / 2 , SCREEN_HEIGHT / 3))
-
-        font2 = pygame.font.Font(None, 40)
-        score_text2 = font2.render(f'Your Score: {self.current_score}', True, (255, 255, 255))
-        screen.blit(score_text2, (SCREEN_WIDTH / 2 - score_text2.get_width() / 2 , SCREEN_HEIGHT * 0.6))
-        font3 = pygame.font.Font(None, 40)
-        score_text3 = font3.render(f'Highest Score: {self.highest_score}', True, (255, 255, 255))
-        screen.blit(score_text3, (SCREEN_WIDTH / 2 - score_text3.get_width() / 2 , SCREEN_HEIGHT * 0.7))
-        font4 = pygame.font.Font(None, 40)
-        score_text4 = font4.render(f'Total Deaths: {self.total_deaths}', True, (255, 255, 255))
-        screen.blit(score_text4, (SCREEN_WIDTH / 2 - score_text4.get_width() / 2 , SCREEN_HEIGHT * 0.8))
+        self.set_text('Game Over', 80, screen, SCREEN_HEIGHT / 4 )
+        self.set_text('Press R to restart', 30, screen, SCREEN_HEIGHT / 3)
+        self.set_score('Your Score:', 40, self.current_score, screen, SCREEN_HEIGHT * 0.6)
+        self.set_score('Highest Score:', 40, self.highest_score, screen, SCREEN_HEIGHT * 0.7)
+        self.set_score('Total Deaths:', 40, self.total_deaths, screen, SCREEN_HEIGHT * 0.8)
 
     def continue_game(self, keyboard_events):
         if(self.current_score > self.highest_score):
@@ -52,4 +35,20 @@ class ScoreHandler:
             self.timer = 0
             self.loose = False
             return True
+        
+    def set_text(self, text, font_size, screen, y):
+        font = pygame.font.Font(None, font_size)
+        score_text = font.render(text, True, (255, 255, 255))
+        screen.blit(score_text, (SCREEN_WIDTH / 2 - score_text.get_width() / 2 , y))
+
+    def set_score(self, text, font_size, number, screen, y, x=0):
+        if(x == 0):
+            font = pygame.font.Font(None, font_size)
+            score_text = font.render(f'{text} {number}', True, (255, 255, 255))
+            x = SCREEN_WIDTH / 2 - score_text.get_width() / 2 
+            screen.blit(score_text, (x, y))
+        else:
+            font = pygame.font.Font(None, font_size)
+            score_text = font.render(f'{text} {number}', True, (255, 255, 255))
+            screen.blit(score_text, (x , y))
 

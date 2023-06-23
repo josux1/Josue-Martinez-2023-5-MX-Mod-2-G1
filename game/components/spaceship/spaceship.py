@@ -24,8 +24,8 @@ class Spaceship(Sprite):
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
         self.draw_bullets(screen)
-        self.set_shield_image(screen, self.rect.x, self.rect.y)
-        self.set_original_image(screen, self.rect.x, self.rect.y)
+        self.set_image(screen, self.rect.x, self.rect.y, SPACESHIP_SHIELD, 50, 70, self.has_shield)
+        self.set_image(screen, self.rect.x, self.rect.y, SPACESHIP, 40, 70, not self.has_shield)
     
     def update(self, keyboard_events):
         if (keyboard_events[pygame.K_LEFT] and self.rect.x >= 0):
@@ -80,7 +80,6 @@ class Spaceship(Sprite):
                     return False
                 if(enemy_bullet.rect.colliderect(self.rect) and self.has_shield == False):
                     self.impacts += 1
-                    # self.impact_sound.play()
                     return False
     
     def reset(self):
@@ -94,23 +93,11 @@ class Spaceship(Sprite):
         self.rect.y = SCREEN_HEIGHT - self.image_height
         self.rect.x = SCREEN_WIDTH // 2 - self.image_width//2
 
-    def set_shield_image(self, screen, x, y):
-        if(self.has_shield):
-            self.image_width = 50
-            self.image_height = 70
-            self.image = SPACESHIP_SHIELD
-            self.image = pygame.transform.scale(self.image, (self.image_width, self.image_height))
-            self.rect = self.image.get_rect()
-            self.rect.y = y
-            self.rect.x = x 
-            screen.blit(self.image, (self.rect.x, self.rect.y))
-            return
-
-    def set_original_image(self, screen, x, y):
-        if(not self.has_shield):
-            self.image_width = 40
-            self.image_height = 70
-            self.image = SPACESHIP
+    def set_image(self, screen, x, y, image, width, height, condition):
+        if(condition):
+            self.image_width = width
+            self.image_height = height
+            self.image = image
             self.image = pygame.transform.scale(self.image, (self.image_width, self.image_height))
             self.rect = self.image.get_rect()
             self.rect.y = y
