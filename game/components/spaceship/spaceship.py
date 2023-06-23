@@ -123,6 +123,7 @@ class Spaceship(Sprite):
             if(shield.rect.colliderect(self.rect) and not self.has_shield):
                 shield.is_alive = False
                 self.has_shield = True
+                self.impacts = 0
                 shield.sound.play()
             elif(shield.rect.colliderect(self.rect) and self.has_shield):
                 return
